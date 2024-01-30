@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# dotenv environment variable files
+.env
+
 # next.js
 /.next/
 /out/
