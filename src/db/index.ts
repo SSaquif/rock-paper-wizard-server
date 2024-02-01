@@ -3,6 +3,7 @@ import { Kysely, PostgresDialect } from "kysely";
 import "dotenv/config";
 import { Database } from "./database";
 
+// postgres dialect
 const dialect = new PostgresDialect({
   pool: new Pool({
     host: process.env.POSTGRES_HOST,
@@ -14,6 +15,7 @@ const dialect = new PostgresDialect({
   }),
 });
 
+// DB instatiation
 export const db = new Kysely<Database>({
   dialect,
 });
