@@ -13,12 +13,12 @@ interface Round {
   // https://stackoverflow.com/questions/19530736/how-can-i-generate-a-unique-string-per-record-in-a-table-in-postgres
   game_id: Generated<number>;
   round: number;
-  player1_move: string;
-  player2_move: string;
-  player3_move: string | null;
-  player4_move: string | null;
-  player5_move: string | null;
-  player6_move: string | null;
+  player1_move_id: string;
+  player2_move_id: string;
+  player3_move_id: string | null;
+  player4_move_id: string | null;
+  player5_move_id: string | null;
+  player6_move_id: string | null;
   player1_target: string;
   player2_target: string;
   player3_target: string | null;
@@ -40,15 +40,28 @@ interface Round {
 }
 
 export interface GameTable {
-  id: string;
+  game_id: string;
   created_at: ColumnType<Date, string | undefined, never>;
   updated_at: ColumnType<Date, string | undefined, string | undefined>;
   deleted_at: ColumnType<Date, string | undefined, string | undefined>;
   password: string;
   number_of_players: number; // 2 to 6
-  // todo: use ts to let array size between 2 and 6, and items have to be unique
-  players: string[];
+  // todo: see if it would be better to use an array for the players
   currentRound: number;
+  player1: string;
+  player2: string;
+  player3: string | null;
+  player4: string | null;
+  player5: string | null;
+  player6: string | null;
+  round_starter:
+    | GameTable["player1"]
+    | GameTable["player2"]
+    | GameTable["player3"]
+    | GameTable["player4"]
+    | GameTable["player5"]
+    | GameTable["player6"];
+  // todo: see if it would be better to use an array for the points
   player1_points: number;
   player2_points: number;
   player3_points: number | null;
@@ -56,6 +69,7 @@ export interface GameTable {
   player5_points: number | null;
   player6_points: number | null;
   // todo: see if can use TS to determine the round number based on the length of the array of rounds
+  // otherwise might be redundant, should probably just have it in the archived table
   rounds: JSONColumnType<Round[]>;
 }
 
