@@ -7,7 +7,7 @@ import {
   Migrator,
   FileMigrationProvider,
 } from "kysely";
-import { RockPaperWizardDatabase } from "./database";
+import { RockPaperWizardDatabase } from "./database.js";
 
 async function migrateToLatest() {
   const db = new Kysely<RockPaperWizardDatabase>({
@@ -27,7 +27,7 @@ async function migrateToLatest() {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(import.meta.dir, "migrations"),
+      migrationFolder: path.join(__dirname, "migrations"),
     }),
   });
 

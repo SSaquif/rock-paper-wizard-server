@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import "dotenv/config";
-import { RockPaperWizardDatabase } from "./database";
+import { RockPaperWizardDatabase } from "./database.js";
 
 // postgres dialect
 const dialect = new PostgresDialect({

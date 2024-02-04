@@ -1,19 +1,25 @@
 {
-  "name": "rock_paper_wizard_app",
-  "version": "1.0.50",
+  "name": "rock_paper_wizard_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "ts:check": "tsc --noEmit",
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "build": "rm -rf build && tsc",
+    "start": "NODE_ENV=production npm run build && tsx build/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.1",
-    "elysia": "latest",
     "kysely": "^0.27.2",
     "pg": "^8.11.3"
-  },
-  "devDependencies": {
-    "@types/pg": "^8.11.0",
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+  }
 }
