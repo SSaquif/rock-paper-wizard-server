@@ -1,4 +1,5 @@
-import { Pool } from "pg";
+import pg from "pg";
+const { Pool } = pg;
 import { Kysely, PostgresDialect } from "kysely";
 import "dotenv/config";
 import { RockPaperWizardDatabase } from "./database.js";

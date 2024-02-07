@@ -1,5 +1,10 @@
+// Use bun to run the migration script
+// won't run into issues that I got using ts-node and tsc
 import * as path from "path";
-import { Pool } from "pg";
+// bun manages to run if I do import {Pool} as pg
+// but changed for consistency
+import pg from "pg";
+const { Pool } = pg;
 import { promises as fs } from "fs";
 import {
   Kysely,
