@@ -18,13 +18,15 @@ export async function up(db: Kysely<any>) {
     .addColumn("player4", "varchar")
     .addColumn("player5", "varchar")
     .addColumn("player6", "varchar")
-    .addColumn("round_starter", "varchar", (col) => col.notNull())
+    .addColumn("round_starter", "varchar")
     .addColumn("player1_points", "integer", (col) => col.notNull())
     .addColumn("player2_points", "integer", (col) => col.notNull())
     .addColumn("player3_points", "integer")
     .addColumn("player4_points", "integer")
     .addColumn("player5_points", "integer")
     .addColumn("player6_points", "integer")
+    .addColumn("number_of_players", "integer", (col) => col.notNull())
+    .addColumn("game_status", "varchar", (col) => col.notNull()) // creating, ongoing, completed
     .addPrimaryKeyConstraint("primary_key_games_table", ["game_id"])
     .execute();
 
