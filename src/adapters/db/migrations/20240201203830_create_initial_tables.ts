@@ -11,6 +11,7 @@ export async function up(db: Kysely<any>) {
     .addColumn("deleted_at", "timestamp")
     .addColumn("password", "varchar", (col) => col.notNull())
     .addColumn("number_of_players", "integer", (col) => col.notNull())
+    .addColumn("number_of_players", "integer", (col) => col.notNull())
     .addColumn("current_round", "integer", (col) => col.notNull())
     .addColumn("player1", "varchar", (col) => col.notNull())
     .addColumn("player2", "varchar", (col) => col.notNull())
@@ -25,7 +26,6 @@ export async function up(db: Kysely<any>) {
     .addColumn("player4_points", "integer")
     .addColumn("player5_points", "integer")
     .addColumn("player6_points", "integer")
-    .addColumn("number_of_players", "integer", (col) => col.notNull())
     .addColumn("game_status", "varchar", (col) => col.notNull()) // creating, ongoing, completed
     .addPrimaryKeyConstraint("primary_key_games_table", ["game_id"])
     .execute();

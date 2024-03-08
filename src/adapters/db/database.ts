@@ -1,6 +1,6 @@
 import { ColumnType } from "kysely";
-import { GameTable } from "./tables/games.js";
-import { UserTable } from "./tables/users.js";
+import { GameTable } from "../../models/games.model.js";
+import { UserTable } from "../../models/users.model.js";
 export interface RockPaperWizardDatabase {
   games: GameTable;
   archived_games: Omit<GameTable, "deleted_at"> & {
