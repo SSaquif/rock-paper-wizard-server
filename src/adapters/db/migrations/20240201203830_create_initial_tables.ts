@@ -1,16 +1,18 @@
 import { Kysely, sql } from "kysely";
 
 export async function up(db: Kysely<any>) {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`.execute(db);
   await db.schema
     .createTable("games")
-    .addColumn("game_id", "serial") //todo: use procedure to generate game_id and make it varchar
+    .addColumn("game_id", "uuid", (col) =>
+      col.defaultTo(sql`uuid_generate_v4()`).notNull()
+    ) //todo: use procedure to generate game_id and make it varchar
     .addColumn("created_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
     .addColumn("updated_at", "timestamp", (col) => col.defaultTo(sql`now()`))
     .addColumn("deleted_at", "timestamp")
     .addColumn("password", "varchar", (col) => col.notNull())
-    .addColumn("number_of_players", "integer", (col) => col.notNull())
     .addColumn("number_of_players", "integer", (col) => col.notNull())
     .addColumn("current_round", "integer", (col) => col.notNull())
     .addColumn("player1", "varchar", (col) => col.notNull())
@@ -32,7 +34,7 @@ export async function up(db: Kysely<any>) {
 
   await db.schema
     .createTable("rounds")
-    .addColumn("game_id", "serial")
+    .addColumn("game_id", "uuid")
     .addColumn("round", "integer", (col) => col.notNull())
     .addColumn("player1_move_id", "varchar", (col) => col.notNull())
     .addColumn("player2_move_id", "varchar", (col) => col.notNull())
@@ -58,10 +60,10 @@ export async function up(db: Kysely<any>) {
     .addColumn("player4_points", "integer")
     .addColumn("player5_points", "integer")
     .addColumn("player6_points", "integer")
-    .addPrimaryKeyConstraint("primary_key_rounds_table", ["game_id", "round"])
     .addForeignKeyConstraint("foreign_key_game_id", ["game_id"], "games", [
       "game_id",
     ])
+    .addPrimaryKeyConstraint("primary_key_rounds_table", ["game_id", "round"])
     .execute();
 }
 
