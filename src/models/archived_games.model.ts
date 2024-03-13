@@ -1,6 +1,6 @@
 import { ColumnType, JSONColumnType, Selectable, Insertable } from "kysely";
 import { GameTable } from "./games.model.js";
-import { Round } from "./rounds.js";
+import { Round } from "./rounds.model.js";
 
 // todo: Use a trigger to archive games when games_end or every player has exited game lobby
 export interface ArchivedGameTable extends GameTable {

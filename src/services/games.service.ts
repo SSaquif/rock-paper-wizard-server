@@ -1,14 +1,23 @@
 import { Request } from "express";
 import { db } from "../adapters/db/index.js";
-import { z } from "zod";
-import { NewGameEntry } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
+import { NewGameEntrySchema } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
+import { NewGame } from "../models/games.model.js";
 
-export const createNewGame = (req: Request) => {
-  console.log(req.body);
-  const { username, numOfPlayers, password, confirmPassword }: NewGameEntry =
-    req.body;
-  // - validate password
-  // - validate number_of_players between 2 and 6
+export const createNewGame = async (req: Request) => {
+  const validatedFormInput = NewGameEntrySchema.safeParse(req.body);
+  if (!validatedFormInput.success) {
+    throw new Error(validatedFormInput.error.issues[0].message);
+  }
+
+  // const { username, numOfPlayers, password, confirmPassword } =
+  //   validatedFormInput.data;
+
+  const dataToInsert = {
+    username: validatedFormInput.data.username,
+    numOfPlayers: validatedFormInput.data.numOfPlayers,
+    password: validatedFormInput.data.password,
+  };
+
   // - generate a new game_id
   // - add created_at timestamp
   // - add updated_at timestamp
@@ -17,4 +26,8 @@ export const createNewGame = (req: Request) => {
   // - add number_of_players
   // - based on number of players, set non need player columns to null
   // - set all player gold to 0
+  // const result = await db
+  //   .insertInto("games")
+  //   .values(dataToInsert)
+  //   .executeTakeFirst();
 };

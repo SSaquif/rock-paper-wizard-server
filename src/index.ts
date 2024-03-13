@@ -6,11 +6,15 @@ import { User } from "./models/users.model.js";
 import Websocket, { WebSocketServer } from "ws";
 import UserRouter from "./routes/users.route.js";
 import GameRouter from "./routes/games.route.js";
+import helmet from "helmet";
+import morgan from "morgan";
 
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+app.use(morgan("dev"));
 app.use(express.json());
+app.use(helmet());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
