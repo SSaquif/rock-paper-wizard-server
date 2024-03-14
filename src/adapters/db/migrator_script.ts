@@ -11,6 +11,7 @@ import {
   PostgresDialect,
   Migrator,
   FileMigrationProvider,
+  MigrationResultSet,
 } from "kysely";
 import { RockPaperWizardDatabase } from "./database.js";
 
@@ -36,11 +37,52 @@ async function migrateToLatest() {
     }),
   });
 
-  const { error, results } = await migrator.migrateToLatest();
+  let migrationResult: null | MigrationResultSet = null;
+  if (process.argv.includes("--up")) {
+    migrationResult = await migrator.migrateUp();
+  } else if (process.argv.includes("--down")) {
+    migrationResult = await migrator.migrateDown();
+  } else if (process.argv.includes("--pending")) {
+    const migrationInfo = await migrator.getMigrations();
+    const pendingMigrations = migrationInfo.filter((mi) => !mi.executedAt);
+    if (pendingMigrations.length === 0) {
+      console.log("No pending migrations");
+    } else {
+      console.log("Pending migrations:");
+      pendingMigrations.forEach((mi) => {
+        console.log(mi.name);
+      });
+    }
+    db.destroy();
+    process.exit(0);
+  } else if (process.argv.includes("--list")) {
+    const migrationInfo = await migrator.getMigrations();
+    console.log("Migrations:");
+    migrationInfo.forEach((mi) => {
+      console.log(`${mi.name} - ${mi.executedAt || "Pending"}`);
+    });
+    db.destroy();
+    process.exit(0);
+  } else if (process.argv.length !== 2) {
+    console.error(
+      "--up, --down, --pending, --list must be provided as the only extra arguments"
+    );
+    console.error(
+      "to run the all pending migrations run the script without any extra arguments"
+    );
+    db.destroy();
+    process.exit(1);
+  } else {
+    migrationResult = await migrator.migrateToLatest();
+  }
+
+  const { error, results } = migrationResult;
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(`Migration ${it.migrationName} was executed successfully`);
+      console.log(
+        `Migration ${it.migrationName} was successfully migrated ${it.direction}`
+      );
     } else if (it.status === "Error") {
       console.error(`Migration ${it.migrationName} failed`);
     }
