@@ -30,7 +30,14 @@ export async function up(db: Kysely<any>) {
     .addColumn("player_5", "varchar")
     .addColumn("player_6", "varchar")
     .addColumn("player_order", sql`text[]`)
-    .addColumn("round_starter", "varchar")
+    .addColumn("round_starter", "varchar") // might be a redundant col but a card could have an effect that changes the round starter
+    .addColumn("unselected_colors", sql`text[]`)
+    .addColumn("player_1_color", "varchar", (col) => col.notNull())
+    .addColumn("player_2_color", "varchar")
+    .addColumn("player_3_color", "varchar")
+    .addColumn("player_4_color", "varchar")
+    .addColumn("player_5_color", "varchar")
+    .addColumn("player_6_color", "varchar")
     .addColumn("player_1_points", "integer", (col) => col.notNull())
     .addColumn("player_2_points", "integer")
     .addColumn("player_3_points", "integer")
@@ -43,18 +50,21 @@ export async function up(db: Kysely<any>) {
     .addColumn("player_4_position", "integer")
     .addColumn("player_5_position", "integer")
     .addColumn("player_6_position", "integer")
+    .addColumn("cards_in_play", sql`integer[]`) // maybe use integer instead
+    .addColumn("cards_in_deck", sql`integer[]`) // maybe use integer instead
+    .addColumn("discard_pile", sql`integer[]`) // maybe use integer instead
     .execute();
 
   await db.schema
     .createTable("rounds")
     .addColumn("game_id", "uuid")
     .addColumn("round", "integer", (col) => col.notNull())
-    .addColumn("player_1_move_id", "varchar", (col) => col.notNull())
-    .addColumn("player_2_move_id", "varchar", (col) => col.notNull())
-    .addColumn("player_3_move_id", "varchar")
-    .addColumn("player_4_move_id", "varchar")
-    .addColumn("player_5_move_id", "varchar")
-    .addColumn("player_6_move_id", "varchar")
+    .addColumn("player_1_card_id", "integer", (col) => col.notNull()) // maybe use integer instead
+    .addColumn("player_2_card_id", "integer", (col) => col.notNull())
+    .addColumn("player_3_card_id", "integer")
+    .addColumn("player_4_card_id", "integer")
+    .addColumn("player_5_card_id", "integer")
+    .addColumn("player_6_card_id", "integer")
     .addColumn("player_1_target", "varchar", (col) => col.notNull())
     .addColumn("player_2_target", "varchar", (col) => col.notNull())
     .addColumn("player_3_target", "varchar")
