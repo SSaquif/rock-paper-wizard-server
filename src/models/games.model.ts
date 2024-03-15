@@ -7,6 +7,8 @@ import {
 } from "kysely";
 import { IntRange } from "../types/utility.types.js";
 
+type PlayerColors = "red" | "blue" | "green" | "yellow" | "purple" | "brown";
+
 export interface GameTable {
   game_id: Generated<string>;
   created_at: Generated<Date>;
@@ -23,6 +25,13 @@ export interface GameTable {
   player_6: string | null;
   player_order: string[];
   round_starter: string | null;
+  unselected_colors: PlayerColors[];
+  player_1_color: PlayerColors;
+  player_2_color: PlayerColors | null;
+  player_3_color: PlayerColors | null;
+  player_4_color: PlayerColors | null;
+  player_5_color: PlayerColors | null;
+  player_6_color: PlayerColors | null;
   player_1_points: number;
   player_2_points: number | null;
   player_3_points: number | null;
@@ -35,6 +44,9 @@ export interface GameTable {
   player_4_position: number | null;
   player_5_position: number | null;
   player_6_position: number | null;
+  cards_in_play: number[];
+  cards_in_deck: number[];
+  discard_pile: number[];
 }
 
 export type Game = Selectable<GameTable>;
