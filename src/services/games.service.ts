@@ -23,6 +23,7 @@ export const createNewGame = async (
     number_of_players: validatedFormInput.data.numOfPlayers as IntRange<2, 6>,
     password: validatedFormInput.data.password,
     current_round: 0,
+    player_order: [],
     game_status: "creating",
   };
 
