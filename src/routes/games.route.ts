@@ -1,5 +1,8 @@
 import express from "express";
-import { createNewGameController } from "../controllers/games.controller.js";
+import {
+  createNewGameController,
+  joinGameController,
+} from "../controllers/games.controller.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -7,5 +10,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/new-game", createNewGameController);
+
+router.patch("/join-game", joinGameController);
 
 export default router;

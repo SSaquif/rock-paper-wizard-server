@@ -3,7 +3,7 @@ import { db } from "../adapters/db/index.js";
 import {
   NewGameFormSchema,
   JoinGameFormSchema,
-  XHR_ERRORS,
+  SYSTEM_ERRORS,
   APIErrorResponse,
   PLAYER_COLORS,
 } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
@@ -64,13 +64,13 @@ export const joinGame = async (
     .executeTakeFirst();
 
   if (!game) {
-    return { error: XHR_ERRORS.GAME_NOT_FOUND }; // todo: consider throwing error instead
+    return { error: SYSTEM_ERRORS.GAME_NOT_FOUND }; // todo: consider throwing error instead
   }
   if (gameId !== game.game_id) {
-    return { error: XHR_ERRORS.GAME_NOT_FOUND }; // todo: consider throwing error instead
+    return { error: SYSTEM_ERRORS.GAME_NOT_FOUND }; // todo: consider throwing error instead
   }
   if (password !== game.password) {
-    return { error: XHR_ERRORS.INVALID_PASSWORD }; // todo: consider throwing error instead
+    return { error: SYSTEM_ERRORS.INVALID_PASSWORD }; // todo: consider throwing error instead
   }
 
   const {
@@ -84,32 +84,38 @@ export const joinGame = async (
     unselected_colors,
   } = game;
 
+  /**
+   * TODO: To Consider:
+   * Might be ok to not throw them and return repsonse like now
+   * Esp if I plan to log errors in a discord channel
+   * Wouln't want to log input errors and
+   */
   if (!unselected_colors.includes(selectedColor)) {
-    return { error: XHR_ERRORS.INVALID_COLOR }; // todo: consider throwing error instead
+    return { error: SYSTEM_ERRORS.INVALID_COLOR }; // todo: consider throwing error instead
   }
 
   const remainingColors = unselected_colors.filter(
     (color) => color !== selectedColor
   );
 
-  const spotsTaken = [
-    player_1,
-    player_2,
-    player_3,
-    player_4,
-    player_5,
-    player_6,
-  ].filter((player) => player).length;
+  const players = [player_1, player_2, player_3, player_4, player_5, player_6];
 
+  // check if game is full
+  const spotsTaken = players.filter((player) => player).length;
   if (spotsTaken >= number_of_players) {
-    return { error: XHR_ERRORS.GAME_FULL }; // todo: consider throwing error instead
+    return { error: SYSTEM_ERRORS.GAME_FULL }; // todo: consider throwing error instead
+  }
+
+  // check for duplicate username
+  if (players.includes(username)) {
+    return { error: SYSTEM_ERRORS.DUPLICATE_USERNAME }; // todo: consider throwing error instead
   }
 
   const updatedGame = {
     ...game,
     [`player_${spotsTaken + 1}`]: username,
     [`player_${spotsTaken + 1}_points`]: 0,
-    [`player_${spotsTaken + 1}_position`]: spotsTaken,
+    [`player_${spotsTaken + 1}_position`]: 6,
     [`player_${spotsTaken + 1}_color`]: selectedColor,
     unselected_colors: remainingColors,
   };
