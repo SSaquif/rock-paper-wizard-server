@@ -9,20 +9,17 @@ export async function up(db: Kysely<any>) {
         .primaryKey()
         .defaultTo(sql`uuid_generate_v4()`)
         .notNull()
-    ) //todo: use procedure to generate game_id and make it varchar
+    )
     .addColumn("created_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
-    // todo: create a trigger and then uncomment
-    // pgsql requires a trigger to auto update a column including dates
-    // unlike mysql
     .addColumn("updated_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
     .addColumn("password", "varchar", (col) => col.notNull())
     .addColumn("number_of_players", "integer", (col) => col.notNull())
     .addColumn("current_round", "integer", (col) => col.notNull())
-    .addColumn("game_status", "varchar", (col) => col.notNull()) // creating, ongoing, completed
+    .addColumn("game_status", "varchar", (col) => col.notNull())
     .addColumn("player_1", "varchar", (col) => col.notNull())
     .addColumn("player_2", "varchar")
     .addColumn("player_3", "varchar")
@@ -50,16 +47,16 @@ export async function up(db: Kysely<any>) {
     .addColumn("player_4_position", "integer")
     .addColumn("player_5_position", "integer")
     .addColumn("player_6_position", "integer")
-    .addColumn("cards_in_play", sql`integer[]`) // maybe use integer instead
-    .addColumn("cards_in_deck", sql`integer[]`) // maybe use integer instead
-    .addColumn("discard_pile", sql`integer[]`) // maybe use integer instead
+    .addColumn("cards_in_play", sql`integer[]`)
+    .addColumn("cards_in_deck", sql`integer[]`)
+    .addColumn("discard_pile", sql`integer[]`)
     .execute();
 
   await db.schema
     .createTable("rounds")
     .addColumn("game_id", "uuid")
     .addColumn("round", "integer", (col) => col.notNull())
-    .addColumn("player_1_card_id", "integer", (col) => col.notNull()) // maybe use integer instead
+    .addColumn("player_1_card_id", "integer", (col) => col.notNull())
     .addColumn("player_2_card_id", "integer", (col) => col.notNull())
     .addColumn("player_3_card_id", "integer")
     .addColumn("player_4_card_id", "integer")
