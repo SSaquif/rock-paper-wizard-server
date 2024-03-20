@@ -9,6 +9,7 @@ import {
 } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
 import { Game, NewGame } from "../models/games.model.js";
 import { IntRange } from "../types/utility.types.js";
+import { Socket } from "socket.io";
 
 export const createNewGame = async (
   req: Request
@@ -45,12 +46,14 @@ export const createNewGame = async (
     .returningAll()
     .executeTakeFirstOrThrow();
 
+  console.log("result from service", result);
   return result;
 };
 
 export const joinGame = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
+  debugger;
   const validatedFormInput = JoinGameFormSchema.safeParse(req.body);
   if (!validatedFormInput.success) {
     throw new Error(validatedFormInput.error.issues[0].message);
@@ -127,5 +130,8 @@ export const joinGame = async (
     .returningAll()
     .executeTakeFirstOrThrow();
 
+  // join room for the game
+  // const socket = req.app.get("socket") as Socket;
+  // socket.join(gameId);
   return result;
 };

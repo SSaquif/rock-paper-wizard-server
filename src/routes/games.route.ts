@@ -4,7 +4,7 @@ import {
   joinGameController,
 } from "../controllers/games.controller.js";
 const router = express.Router();
-
+// TODO: Add generics for http methods
 router.get("/", (req, res) => {
   res.send("Hello Games");
 });

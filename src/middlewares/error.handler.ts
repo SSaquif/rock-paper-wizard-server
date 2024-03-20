@@ -1,4 +1,4 @@
-import { XHR_ERRORS } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
+import { SYSTEM_ERRORS } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
 import { ErrorRequestHandler } from "express";
 
 // todo: consider setting up a Monad to handle errors
@@ -17,7 +17,7 @@ export const clientErrorHandler: ErrorRequestHandler = (
   next
 ) => {
   if (req.xhr) {
-    return res.status(500).json({ error: XHR_ERRORS.GENERIC_ERROR });
+    return res.status(500).json({ error: SYSTEM_ERRORS.GENERIC_ERROR });
   } else {
     next(error);
   }

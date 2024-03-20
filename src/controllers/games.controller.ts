@@ -1,18 +1,24 @@
 import { RequestHandler } from "express";
 import { createNewGame, joinGame } from "../services/games.service.js";
 
-export const createNewGameController: RequestHandler = (req, res, next) => {
+export const createNewGameController: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   try {
-    const result = createNewGame(req);
+    const result = await createNewGame(req);
+    console.log("result from controller", result);
     return res.json(result);
   } catch (error) {
     next(error);
   }
 };
 
-export const joinGameController: RequestHandler = (req, res, next) => {
+export const joinGameController: RequestHandler = async (req, res, next) => {
   try {
-    const result = joinGame(req);
+    const result = await joinGame(req);
+    console.log("result from controller", result);
     return res.json(result);
   } catch (error) {
     next(error);
