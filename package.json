@@ -2,13 +2,13 @@
   "name": "rock_paper_wizard_server",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "ts:check": "tsc --noEmit",
-    "dev": "tsx watch --clear-screen=false src/index.ts",
-    "build": "rm -rf build && tsc",
-    "start": "NODE_ENV=production npm run build && tsx build/src/index.js",
+    "dev:debug": "tsup src/index.ts --format esm --dts --sourcemap --clean --env.NODE_ENV development --watch --onSuccess 'node dist/index.js'",
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean",
+    "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +19,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.16",
     "@types/pg": "^8.11.2",
+    "tsup": "^8.0.2",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
@@ -31,8 +32,7 @@
     "kysely": "^0.27.2",
     "morgan": "^1.10.0",
     "pg": "^8.11.3",
-    "uuid": "^9.0.1",
-    "ws": "^8.16.0",
+    "socket.io": "^4.7.5",
     "zod": "^3.22.4"
   }
 }
