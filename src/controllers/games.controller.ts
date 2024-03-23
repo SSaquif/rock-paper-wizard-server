@@ -8,7 +8,6 @@ export const createNewGameController: RequestHandler = async (
 ) => {
   try {
     const result = await createNewGame(req);
-    console.log("result from controller", result);
     return res.json(result);
   } catch (error) {
     next(error);
@@ -18,7 +17,6 @@ export const createNewGameController: RequestHandler = async (
 export const joinGameController: RequestHandler = async (req, res, next) => {
   try {
     const result = await joinGame(req);
-    console.log("result from controller", result);
     return res.json(result);
   } catch (error) {
     next(error);
