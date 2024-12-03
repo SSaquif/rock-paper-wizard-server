@@ -7,7 +7,7 @@ import {
   APIErrorResponse,
   PLAYER_COLORS,
 } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
-import { Game, NewGame } from "../models/games.model.js";
+import { Game, NewGame } from "../models/rpw_games.model.js";
 import { IntRange } from "../types/utility.types.js";
 import { Socket } from "socket.io";
 

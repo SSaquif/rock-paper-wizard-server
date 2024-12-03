@@ -13,10 +13,10 @@ import {
   FileMigrationProvider,
   MigrationResultSet,
 } from "kysely";
-import { RockPaperWizardDatabase } from "./database.js";
+import { BoardGamesDatabase } from "./database.js";
 
 async function migrateToLatest() {
-  const db = new Kysely<RockPaperWizardDatabase>({
+  const db = new Kysely<BoardGamesDatabase>({
     dialect: new PostgresDialect({
       pool: new Pool({
         host: process.env.POSTGRES_HOST,

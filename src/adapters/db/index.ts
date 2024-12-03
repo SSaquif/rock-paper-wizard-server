@@ -2,7 +2,7 @@ import pg from "pg";
 const { Pool } = pg;
 import { Kysely, PostgresDialect } from "kysely";
 import "dotenv/config";
-import { RockPaperWizardDatabase } from "./database.js";
+import { BoardGamesDatabase } from "./database.js";
 
 // postgres dialect
 const dialect = new PostgresDialect({
@@ -17,6 +17,6 @@ const dialect = new PostgresDialect({
 });
 
 // DB instatiation
-export const db = new Kysely<RockPaperWizardDatabase>({
+export const db = new Kysely<BoardGamesDatabase>({
   dialect,
 });

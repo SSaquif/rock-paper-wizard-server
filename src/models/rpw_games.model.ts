@@ -9,7 +9,7 @@ import { IntRange } from "../types/utility.types.js";
 
 type PlayerColors = "red" | "blue" | "green" | "yellow" | "purple" | "brown";
 
-export interface GameTable {
+export interface RPWGameTable {
   game_id: Generated<string>;
   created_at: Generated<Date>;
   updated_at: Generated<Date>;
@@ -49,6 +49,6 @@ export interface GameTable {
   discard_pile: number[];
 }
 
-export type Game = Selectable<GameTable>;
-export type NewGame = Insertable<GameTable>;
-export type UpdatedGame = Updateable<GameTable>;
+export type Game = Selectable<RPWGameTable>;
+export type NewGame = Insertable<RPWGameTable>;
+export type UpdatedGame = Updateable<RPWGameTable>;

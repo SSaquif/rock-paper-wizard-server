@@ -3,7 +3,7 @@ import { Kysely, sql } from "kysely";
 export async function up(db: Kysely<any>) {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`.execute(db);
   await db.schema
-    .createTable("games")
+    .createTable("rpw_games")
     .addColumn("game_id", "uuid", (col) =>
       col
         .primaryKey()
@@ -53,7 +53,7 @@ export async function up(db: Kysely<any>) {
     .execute();
 
   await db.schema
-    .createTable("rounds")
+    .createTable("rpw_rounds")
     .addColumn("game_id", "uuid")
     .addColumn("round", "integer", (col) => col.notNull())
     .addColumn("player_1_card_id", "integer", (col) => col.notNull())
@@ -74,14 +74,20 @@ export async function up(db: Kysely<any>) {
     .addColumn("player_4_points", "integer")
     .addColumn("player_5_points", "integer")
     .addColumn("player_6_points", "integer")
-    .addForeignKeyConstraint("foreign_key_game_id", ["game_id"], "games", [
+    .addForeignKeyConstraint(
+      "foreign_key_rpw_game_id",
+      ["game_id"],
+      "rpw_games",
+      ["game_id"]
+    )
+    .addPrimaryKeyConstraint("primary_key_rpw_rounds_table", [
       "game_id",
+      "round",
     ])
-    .addPrimaryKeyConstraint("primary_key_rounds_table", ["game_id", "round"])
     .execute();
 }
 
 export async function down(db: Kysely<any>) {
-  await db.schema.dropTable("rounds").execute();
-  await db.schema.dropTable("games").execute();
+  await db.schema.dropTable("rpw_rounds").execute();
+  await db.schema.dropTable("rpw_games").execute();
 }
