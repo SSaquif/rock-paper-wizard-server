@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { createNewGame, joinGame } from "../services/games.service.js";
+import { createNewGame, joinGame } from "../services/rpw_games.service.js";
 
 export const createNewGameController: RequestHandler = async (
   req,

@@ -41,7 +41,7 @@ export const createNewGame = async (
 
   // todo: determine if I need to return all
   const result = await db
-    .insertInto("games")
+    .insertInto("rpw_games")
     .values(dataToInsert)
     .returningAll()
     .executeTakeFirstOrThrow();
@@ -61,7 +61,7 @@ export const joinGame = async (
   const { gameId, username, password, selectedColor } = validatedFormInput.data;
 
   const game = await db
-    .selectFrom("games")
+    .selectFrom("rpw_games")
     .selectAll()
     .where("game_id", "=", gameId)
     .executeTakeFirst();
@@ -124,7 +124,7 @@ export const joinGame = async (
   };
 
   const result = await db
-    .updateTable("games")
+    .updateTable("rpw_games")
     .set(updatedGame)
     .where("game_id", "=", gameId)
     .returningAll()
