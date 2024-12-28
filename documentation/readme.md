@@ -70,6 +70,10 @@ This will happen when user creates a new game.
 - based on number of players, set non need player columns to null
 - set all player gold to 0
 
+### Client side
+
+-
+
 ### Join a Game
 
 This will happen when user joins a game.

@@ -4,7 +4,7 @@ import "dotenv/config";
 import helmet from "helmet";
 import morgan from "morgan";
 import UserRouter from "./routes/users.route.js";
-import GameRouter from "./routes/games.route.js";
+import RPWGameRouter from "./routes/rpw_games.route.js";
 import {
   errorLogger,
   clientErrorHandler,
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", UserRouter);
-app.use("/api/games", GameRouter);
+app.use("/api/rpw_games", RPWGameRouter);
 
 // error handling middleware
 app.use(errorLogger);
@@ -49,6 +49,8 @@ app.use(errorHandler);
 const expressServer = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Initialize socket.io server. Attach it to express server
 // TODO: Need to handle cors properly for production
 const io = new Server(expressServer, {
   cors: {
@@ -58,7 +60,7 @@ const io = new Server(expressServer, {
 });
 
 // TODO: Fix type issues
-// // // Middleware to attach io to req
+// Middleware to attach io to req
 app.use((req, res, next) => {
   req.io = io; // Fix TS issue
   next();

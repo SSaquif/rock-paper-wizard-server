@@ -11,7 +11,7 @@ import { Game, NewGame } from "../models/rpw_games.model.js";
 import { IntRange } from "../types/utility.types.js";
 import { Socket } from "socket.io";
 
-export const createNewGame = async (
+export const createNewGameService = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
   const validatedFormInput = NewGameFormSchema.safeParse(req.body);
@@ -50,7 +50,7 @@ export const createNewGame = async (
   return result;
 };
 
-export const joinGame = async (
+export const joinGameService = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
   debugger;
@@ -133,5 +133,20 @@ export const joinGame = async (
   // join room for the game
   // const socket = req.app.get("socket") as Socket;
   // socket.join(gameId);
+  return result;
+};
+
+export const getGameByGameIDService = async (
+  req: Request
+): Promise<Game | APIErrorResponse> => {
+  const result = await db
+    .selectFrom("rpw_games")
+    .selectAll()
+    .where("game_id", "=", req.params.gameId)
+    .executeTakeFirst();
+
+  if (!result) {
+    return { error: SYSTEM_ERRORS.GAME_NOT_FOUND };
+  }
   return result;
 };

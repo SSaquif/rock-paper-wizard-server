@@ -55,3 +55,6 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
+
+# Clipboard
+clipboard.md
