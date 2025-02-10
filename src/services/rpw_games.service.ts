@@ -53,7 +53,6 @@ export const createNewGameService = async (
 export const joinGameService = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
-  debugger;
   const validatedFormInput = JoinGameFormSchema.safeParse(req.body);
   if (!validatedFormInput.success) {
     throw new Error(validatedFormInput.error.issues[0].message);
