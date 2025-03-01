@@ -1,7 +1,8 @@
 import { SYSTEM_ERRORS } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
 import { ErrorRequestHandler } from "express";
 
-// todo: consider setting up a Monad to handle errors
+// @todo: consider setting up a Monad to handle errors
+// @todo: maybe improve the typing of the error response object
 
 export const errorLogger: ErrorRequestHandler = (err, req, res, next) => {
   // todo: consider logging the error to a file or db or slack/discord channel
