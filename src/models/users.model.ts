@@ -11,8 +11,9 @@ import {
 export interface UserTable {
   user_id: string;
   password: string;
-  created_at: ColumnType<"timestamp">;
-  updated_at: ColumnType<"timestamp">;
+  // @todo: figure out how to make them timestamp with timezone
+  created_at: Generated<Date>;
+  updated_at: Generated<Date>;
   // For later
   // email: string;
   // is_verified: boolean;
