@@ -11,6 +11,7 @@ type PlayerColors = "red" | "blue" | "green" | "yellow" | "purple" | "brown";
 
 export interface RPWGameTable {
   game_id: Generated<string>;
+  // @todo: figure out how to make them timestamp with timezone
   created_at: Generated<Date>;
   updated_at: Generated<Date>;
   password: string;

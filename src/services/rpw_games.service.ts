@@ -1,8 +1,8 @@
 import { Request } from "express";
 import { db } from "../adapters/db/index.js";
 import {
-  NewGameFormSchema,
-  JoinGameFormSchema,
+  NewRPWGameFormSchema,
+  JoinRPWGameFormSchema,
   SYSTEM_ERRORS,
   APIErrorResponse,
   PLAYER_COLORS,
@@ -14,7 +14,7 @@ import { Socket } from "socket.io";
 export const createNewGameService = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
-  const validatedFormInput = NewGameFormSchema.safeParse(req.body);
+  const validatedFormInput = NewRPWGameFormSchema.safeParse(req.body);
   if (!validatedFormInput.success) {
     throw new Error(validatedFormInput.error.issues[0].message);
   }
@@ -53,7 +53,7 @@ export const createNewGameService = async (
 export const joinGameService = async (
   req: Request
 ): Promise<Game | APIErrorResponse> => {
-  const validatedFormInput = JoinGameFormSchema.safeParse(req.body);
+  const validatedFormInput = JoinRPWGameFormSchema.safeParse(req.body);
   if (!validatedFormInput.success) {
     throw new Error(validatedFormInput.error.issues[0].message);
   }
