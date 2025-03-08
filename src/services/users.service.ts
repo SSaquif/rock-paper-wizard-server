@@ -24,9 +24,10 @@ export const getUsersService = async (
 export const registerUserService = async (
   req: Request
 ): Promise<AuthenticatedUser> => {
-  const { user_id, password, confirm_password } = req.body;
+  //@todo: Figure out way to properly type the request body
+  const { username, password, confirmPassword } = req.body;
   // @todo: Remove Duplicate Validation if the Zod validation is working
-  if (password !== confirm_password) {
+  if (password !== confirmPassword) {
     return {
       error: SYSTEM_ERRORS.PASSWORD_MISMATCH,
       isError: true,
@@ -37,7 +38,7 @@ export const registerUserService = async (
   const existingUser = await db
     .selectFrom("users")
     .selectAll()
-    .where("user_id", "=", user_id)
+    .where("user_id", "=", username)
     .execute();
 
   if (existingUser.length) {
@@ -53,7 +54,7 @@ export const registerUserService = async (
   const user = await db
     .insertInto("users")
     .values({
-      user_id,
+      user_id: username,
       password: hashedPassword,
     })
     .returning(["user_id", "created_at", "updated_at"])
@@ -77,10 +78,11 @@ export const registerUserService = async (
 export const loginUserService = async (
   req: Request
 ): Promise<AuthenticatedUser> => {
-  const { user_id, password } = req.body;
+  //@todo: Figure out way to properly type the request body
+  const { username, password } = req.body;
   const user = await db
     .selectFrom("users")
-    .where("user_id", "=", user_id)
+    .where("user_id", "=", username)
     .selectAll()
     .executeTakeFirst();
 
