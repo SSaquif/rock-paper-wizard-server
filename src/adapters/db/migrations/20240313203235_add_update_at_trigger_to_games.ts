@@ -12,6 +12,6 @@ export async function up(db: Kysely<any>) {
 
 export async function down(db: Kysely<any>) {
   await sql`
-    DROP TRIGGER IF EXISTS game_updated_at_trigger ON games;
+    DROP TRIGGER IF EXISTS game_updated_at_trigger ON rpw_games;
     `.execute(db);
 }
