@@ -1,5 +1,10 @@
-// Use bun to run the migration script
-// won't run into issues that I got using ts-node and tsc
+/*
+ * Use bun to run the migration script
+ * won't run into issues that I got using ts-node and tsc
+ * Need to run this script from the
+ * root of the project containing
+ * the .env file
+ */
 import * as path from "path";
 // bun manages to run if I do import {Pool} as pg
 // but changed for consistency
