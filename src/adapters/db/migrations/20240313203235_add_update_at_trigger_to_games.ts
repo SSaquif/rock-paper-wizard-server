@@ -2,7 +2,7 @@ import { Kysely, sql } from "kysely";
 
 export async function up(db: Kysely<any>) {
   await sql`
-    CREATE TRIGGER game_updated_at_trigger
+    CREATE TRIGGER rpw_game_updated_at_trigger
         BEFORE UPDATE
     ON rpw_games
     FOR EACH ROW
@@ -12,6 +12,6 @@ export async function up(db: Kysely<any>) {
 
 export async function down(db: Kysely<any>) {
   await sql`
-    DROP TRIGGER IF EXISTS game_updated_at_trigger ON rpw_games;
+    DROP TRIGGER IF EXISTS rpw_game_updated_at_trigger ON rpw_games;
     `.execute(db);
 }
