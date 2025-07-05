@@ -3,6 +3,7 @@ import { Namespace, Server } from "socket.io";
 import "dotenv/config";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import UserRouter from "./routes/users.route.js";
 import RPWGameRouter from "./routes/rpw_games.route.js";
 import {
@@ -28,9 +29,10 @@ declare global {
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(helmet());
+app.use(cookieParser());
 // console.log(__dirname);
 // app.use(express.static(__dirname + "/public"));
 
