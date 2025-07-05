@@ -4,6 +4,7 @@ import {
   registerUser,
   loginUser,
 } from "../controllers/users.controller.js";
+import { getUserSessionFromCookie } from "../controllers/users.controller.js";
 const router = express.Router();
 
 // /api/users
@@ -11,12 +12,12 @@ const router = express.Router();
 router.get("/", getUsers);
 
 // /api/users/register
-// register a new user
 router.post("/register", registerUser);
 
 // /api/users/login
-// sign in a user
-// @todo: decide if I want to use a something other than POST
 router.post("/login", loginUser);
+
+// /api/users/session
+router.get("/session", getUserSessionFromCookie);
 
 export default router;

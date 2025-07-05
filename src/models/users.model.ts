@@ -11,6 +11,7 @@ import {
 export interface UserTable {
   user_id: string;
   password: string;
+  is_admin: boolean;
   // @todo: figure out how to make them timestamp with timezone
   created_at: Generated<Date>;
   updated_at: Generated<Date>;

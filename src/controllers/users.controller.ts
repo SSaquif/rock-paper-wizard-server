@@ -1,21 +1,28 @@
 import { RequestHandler, Response } from "express";
 import {
+  getUserSessionFromCookieService,
   getUsersService,
   loginUserService,
   registerUserService,
 } from "../services/users.service.js";
-import { AuthenticatedUser } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
+import {
+  AuthenticatedSession,
+  AuthenticatedUser,
+  User,
+} from "@ssaquif/rock-paper-wizard-api-types-and-schema";
+import { typedResponse } from "../helpers/typedResponse.js";
 
 export const getUsers: RequestHandler = async (
   req,
   res,
   next
-): Promise<Response<Omit<AuthenticatedUser, "password">[]> | undefined> => {
+): Promise<Response<Omit<User, "password">[]>> => {
   try {
     const result = await getUsersService(req);
-    return res.status(200).json(result);
+    return typedResponse<Omit<User, "password">[]>(res, 200, result);
   } catch (error) {
     next(error);
+    throw error; // satisfies return type
   }
 };
 
@@ -23,15 +30,24 @@ export const registerUser: RequestHandler = async (
   req,
   res,
   next
-): Promise<Response<AuthenticatedUser> | undefined> => {
+): Promise<Response<AuthenticatedUser>> => {
   try {
     const result = await registerUserService(req);
     if (result.isError) {
-      return res.status(400).json(result);
+      return typedResponse<AuthenticatedUser>(res, 400, result);
     }
-    return res.status(201).json(result);
+    // Set the session cookie
+    res.cookie("session_id", result.session.session_id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      expires: new Date(result.session.session_expires_at),
+    });
+    return typedResponse<AuthenticatedUser>(res, 201, result);
   } catch (error) {
     next(error);
+    throw error; // satisfies return type
   }
 };
 
@@ -39,14 +55,41 @@ export const loginUser: RequestHandler = async (
   req,
   res,
   next
-): Promise<Response<AuthenticatedUser> | undefined> => {
+): Promise<Response<AuthenticatedUser>> => {
   try {
     const result = await loginUserService(req);
     if (result.isError) {
-      return res.status(400).json(result);
+      return typedResponse<AuthenticatedUser>(res, 400, result);
     }
-    return res.status(200).json(result);
+
+    // Set the session cookie
+    res.cookie("session_id", result.session.session_id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      expires: new Date(result.session.session_expires_at),
+    });
+    return typedResponse<AuthenticatedUser>(res, 200, result);
   } catch (error) {
     next(error);
+    throw error; // satisfies return type
+  }
+};
+
+export const getUserSessionFromCookie: RequestHandler = async (
+  req,
+  res,
+  next
+): Promise<Response<AuthenticatedSession>> => {
+  try {
+    const result = await getUserSessionFromCookieService(req);
+    if (result.isError) {
+      return typedResponse<AuthenticatedSession>(res, 401, result);
+    }
+    return typedResponse<AuthenticatedSession>(res, 200, result);
+  } catch (error) {
+    next(error);
+    throw error; // satisifies return type
   }
 };
