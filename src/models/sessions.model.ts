@@ -3,6 +3,7 @@ import { Generated, Selectable, Insertable, Updateable } from "kysely";
 export interface SessionTable {
   session_id: Generated<string>;
   user_id: string;
+  is_admin: boolean;
   created_at: Generated<Date>;
   updated_at: Generated<Date>;
   expires_at: Date;
