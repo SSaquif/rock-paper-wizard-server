@@ -3,9 +3,11 @@ import {
   getUserSessionFromCookieService,
   getUsersService,
   loginUserService,
+  logoutUserService,
   registerUserService,
 } from "../services/users.service.js";
 import {
+  APIErrorResponse,
   AuthenticatedSession,
   AuthenticatedUser,
   User,
@@ -91,5 +93,28 @@ export const getUserSessionFromCookie: RequestHandler = async (
   } catch (error) {
     next(error);
     throw error; // satisifies return type
+  }
+};
+
+export const logoutUser: RequestHandler = async (
+  req,
+  res,
+  next
+): Promise<Response<APIErrorResponse> | void> => {
+  try {
+    const result = await logoutUserService(req);
+    if (result.isError) {
+      return typedResponse<APIErrorResponse>(res, 400, result);
+    }
+    // Clear the session cookie
+    return res.clearCookie("session_id", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+  } catch (error) {
+    next(error);
+    throw error; // satisfies return type
   }
 };

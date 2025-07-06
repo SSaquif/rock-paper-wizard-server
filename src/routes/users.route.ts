@@ -3,6 +3,7 @@ import {
   getUsers,
   registerUser,
   loginUser,
+  logoutUser,
 } from "../controllers/users.controller.js";
 import { getUserSessionFromCookie } from "../controllers/users.controller.js";
 const router = express.Router();
@@ -19,5 +20,8 @@ router.post("/login", loginUser);
 
 // /api/users/session
 router.get("/session", getUserSessionFromCookie);
+
+// /api/users/logout
+router.post("/logout", logoutUser);
 
 export default router;

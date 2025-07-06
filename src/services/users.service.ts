@@ -3,10 +3,13 @@ import { Request, Response } from "express";
 import { db } from "../adapters/db/index.js";
 import { addHours } from "date-fns";
 import {
+  APIErrorResponse,
+  APISuccessResponse,
   AuthenticatedSession,
   AuthenticatedUser,
   LoginFormSchema,
   Session,
+  SUCCESS_MESSAGES,
   SYSTEM_ERRORS,
   User,
   UserRegistrationFormSchema,
@@ -181,6 +184,8 @@ export const loginUserService = async (
     };
   }
 
+  // @todo: Might be worth returning nothing here and just setting the session cookie in the controller
+  // since later the user is logged in using the session cookie
   return {
     isError: false,
     user: {
@@ -227,5 +232,31 @@ export const getUserSessionFromCookieService = async (
   return {
     isError: false,
     session,
+  };
+};
+
+export const logoutUserService = async (
+  req: Request
+): Promise<APIErrorResponse | APISuccessResponse> => {
+  const sessionId = req.cookies.session_id;
+
+  if (!sessionId) {
+    return {
+      isError: true,
+      error: SYSTEM_ERRORS.SESSION_ID_NOT_PROVIDED,
+      message: "No session ID provided in the request cookie",
+    };
+  }
+
+  // Delete the session from the database
+  const result = await db
+    .deleteFrom("sessions")
+    .where("session_id", "=", sessionId)
+    .executeTakeFirst();
+
+  console.log("result of delete session", result);
+  return {
+    isError: false,
+    message: SUCCESS_MESSAGES.SESSION_DELETED,
   };
 };
