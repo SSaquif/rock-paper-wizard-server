@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import {
   getUserSessionFromCookieService,
   getUsersService,
@@ -16,29 +16,21 @@ import {
 } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
 import { typedResponse } from "../helpers/typedResponse.js";
 
-export const getUsers: RequestHandler = async (
-  req,
-  res,
-  next
-): Promise<Response<Omit<User, "password">[]>> => {
+export const getUsers: RequestHandler = async (req, res, next) => {
   try {
     const result = await getUsersService(req);
     return typedResponse<Omit<User, "password">[]>(res, 200, result);
   } catch (error) {
     next(error);
-    throw error; // satisfies return type
+    throw error;
   }
 };
 
-export const registerUser: RequestHandler = async (
-  req,
-  res,
-  next
-): Promise<Response<AuthenticatedUser>> => {
+export const registerUser: RequestHandler = async (req, res, next) => {
   try {
     const result = await registerUserService(req);
     if (result.isError) {
-      return typedResponse<AuthenticatedUser>(res, 400, result);
+      return typedResponse<APIErrorResponse>(res, 400, result);
     }
     // Set the session cookie
     res.cookie("session_id", result.session.session_id, {
@@ -48,24 +40,23 @@ export const registerUser: RequestHandler = async (
       path: "/",
       expires: new Date(result.session.session_expires_at),
     });
-    return typedResponse<AuthenticatedUser>(res, 201, result);
+    // returns th response with the cookie
+    return typedResponse<APISuccessResponse>(res, 201, {
+      isError: false,
+      message: SUCCESS_MESSAGES.USER_REGISTERED,
+    });
   } catch (error) {
     next(error);
-    throw error; // satisfies return type
+    throw error;
   }
 };
 
-export const loginUser: RequestHandler = async (
-  req,
-  res,
-  next
-): Promise<Response<AuthenticatedUser>> => {
+export const loginUser: RequestHandler = async (req, res, next) => {
   try {
     const result = await loginUserService(req);
     if (result.isError) {
       return typedResponse<AuthenticatedUser>(res, 400, result);
     }
-
     // Set the session cookie
     res.cookie("session_id", result.session.session_id, {
       httpOnly: true,
@@ -74,10 +65,14 @@ export const loginUser: RequestHandler = async (
       path: "/",
       expires: new Date(result.session.session_expires_at),
     });
-    return typedResponse<AuthenticatedUser>(res, 200, result);
+    // returns the response with the cookie
+    return typedResponse<APISuccessResponse>(res, 200, {
+      isError: false,
+      message: SUCCESS_MESSAGES.USER_LOGGED_IN,
+    });
   } catch (error) {
     next(error);
-    throw error; // satisfies return type
+    throw error;
   }
 };
 
@@ -85,7 +80,7 @@ export const getUserSessionFromCookie: RequestHandler = async (
   req,
   res,
   next
-): Promise<Response<AuthenticatedSession>> => {
+) => {
   try {
     const result = await getUserSessionFromCookieService(req);
     if (result.isError) {
@@ -94,7 +89,7 @@ export const getUserSessionFromCookie: RequestHandler = async (
     return typedResponse<AuthenticatedSession>(res, 200, result);
   } catch (error) {
     next(error);
-    throw error; // satisifies return type
+    throw error;
   }
 };
 
@@ -118,6 +113,6 @@ export const logoutUser: RequestHandler = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
-    throw error; // satisfies return type
+    throw error;
   }
 };
