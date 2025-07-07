@@ -8,8 +8,10 @@ import {
 } from "../services/users.service.js";
 import {
   APIErrorResponse,
+  APISuccessResponse,
   AuthenticatedSession,
   AuthenticatedUser,
+  SUCCESS_MESSAGES,
   User,
 } from "@ssaquif/rock-paper-wizard-api-types-and-schema";
 import { typedResponse } from "../helpers/typedResponse.js";
@@ -96,22 +98,23 @@ export const getUserSessionFromCookie: RequestHandler = async (
   }
 };
 
-export const logoutUser: RequestHandler = async (
-  req,
-  res,
-  next
-): Promise<Response<APIErrorResponse> | void> => {
+export const logoutUser: RequestHandler = async (req, res, next) => {
   try {
     const result = await logoutUserService(req);
     if (result.isError) {
       return typedResponse<APIErrorResponse>(res, 400, result);
     }
-    // Clear the session cookie
-    return res.clearCookie("session_id", {
+    // Clear the session cookie and set the response cookie header
+    res.clearCookie("session_id", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
+    });
+    // send the response
+    return typedResponse<APISuccessResponse>(res, 200, {
+      isError: false,
+      message: SUCCESS_MESSAGES.USER_LOGGED_OUT,
     });
   } catch (error) {
     next(error);
